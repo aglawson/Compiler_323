@@ -80,7 +80,7 @@ void readFile(string fileName) {
 		cout << "Error, " << fileName << " could not be opened" << endl;
 		exit(0);
 	}
-	cout << "Parsed Code" << endl;
+	cout << "PARSED CODE" << endl;
 	cout << "TOKENS" << "       " << "LEXEMES" << endl;
 
 	while (!file.eof()) {
@@ -101,7 +101,7 @@ void readFile(string fileName) {
 		if (isalnum(ch)) {
 			buffer[j++] = ch;
 		}
-		if ((ch == ' ' || ch == '\n' || Operator(buffer[j]) == 1 || Separators(ch) == 1) && (j != 0))
+		if ((ch == ' ' || ch == '\n' || Operator(ch) == 1 || Separators(ch) == 1) && (j != 0))
 		{
 			buffer[j] = '\0';
 			j = 0;
