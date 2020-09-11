@@ -8,7 +8,7 @@ using namespace std;
 
 int Keyword(char buffer[])
 {
-	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not" };
+	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not"};
 
 	int flag = 0;
 	for (int i = 0; i < 20; i++)
@@ -22,8 +22,55 @@ int Keyword(char buffer[])
 	return flag;
 }
 
+void outputCode(string filename) {
+	fstream code;
+	char line;
+	code.open(filename);
+	if (!code.is_open()) {
+		cout << "Error reading file" << endl;
+		exit(0);
+	}
+
+	cout << "CODE INPUTTED" << endl;
+	while (!code.eof()) {
+		line = code.get();
+		cout << line;
+	}
+	cout << endl << endl;
+
+	code.close();
+}
+
+int Operator(char buffer) {
+	char operators[] = { '+', '=', '-', '/', '*', '%', '<', '>' };
+
+	int flag = 0;
+
+	for (int i = 0; i < 8; i++) {
+		if (buffer == operators[i]) {
+			flag = 1;
+			break;
+		}
+	}
+
+	return flag;
+}
+
+int Separators(char buffer) {
+	char separators[] = R"((){}[],.:;)";
+
+	int flag = 0;
+
+	for (int i = 0; i < sizeof(separators); i++) {
+		if (buffer == separators[i]) {
+			flag = 1;
+		}
+	}
+
+	return flag;
+}
 void readFile(string fileName) {
-	char ch, buffer[15], operators[] = "+-*/%=", symbols[] = R"("()[]{}/\<>'";,.:)";
+	char ch, buffer[15], operators[] = "+-*/%=";
 
 	fstream file;
 	file.open(fileName);
@@ -33,6 +80,8 @@ void readFile(string fileName) {
 		cout << "Error, " << fileName << " could not be opened" << endl;
 		exit(0);
 	}
+	cout << "Parsed Code" << endl;
+	cout << "TOKENS" << "       " << "LEXEMES" << endl;
 
 	while (!file.eof()) {
 
@@ -40,30 +89,31 @@ void readFile(string fileName) {
 		if (ch == '!') {
 			file.ignore(256, '!');
 		}
-		for (int i = 0; i < 6; ++i)
-		{
-			if (ch == operators[i])
-				cout << "Operator: " << ch << endl;
+		
+		if (Operator(ch) == 1) {
+			cout << "Operator:    " << ch << endl;
 		}
-		for (int j = 0; j < 12; j++) {
-			if (ch == symbols[j]) {
-				cout << "Separator: " << ch << endl;
-			}
+
+		if (Separators(ch) == 1) {
+			cout << "Separator:   " << ch << endl;
 		}
+
 		if (isalnum(ch)) {
 			buffer[j++] = ch;
 		}
-		else if ((ch == ' ' || ch == '\n') && (j != 0))
+		if ((ch == ' ' || ch == '\n' || Operator(buffer[j]) == 1 || Separators(ch) == 1) && (j != 0))
 		{
 			buffer[j] = '\0';
 			j = 0;
+
 			if (Keyword(buffer) == 1) {
-				cout << "Keyword: " << buffer << endl;
+				cout << "Keyword:     " << buffer << endl;
 			}
 			else {
-				cout << "Identifier: " << buffer << endl;
+					cout << "Identifier:  " << buffer << endl;
 			}
 		}
+		
 
 	}
 
@@ -79,13 +129,19 @@ int main()
 	cin >> choice;
 
 	switch (choice) {
+
+	// If user wants to enter code from a .txt file
 	case 'f': case 'F':
 		cout << "Enter file name: ";
 		cin >> fileName;
+		outputCode(fileName);
 		readFile(fileName);
+		
 		break;
+	// If user wants to enter code from the terminal
 	case 't': case 'T':
 		cout << "Terminal capabilities are not implemented yet." << endl << endl;
+
 		//ofstream file;
 		//file.open("newfile.txt");
 		//if (!file.is_open()) {
