@@ -71,7 +71,7 @@ int Separators(char buffer) {
 }
 void readFile(string fileName) {
 	char ch, buffer[15], operators[] = "+-*/%=";
-
+	
 	fstream file;
 	file.open(fileName);
 	int j = 0;
@@ -98,22 +98,24 @@ void readFile(string fileName) {
 			cout << "Separator:   " << ch << endl;
 		}
 
-		if (isalnum(ch)) {
+		if (isalnum(ch) || ch == '$') {
 			buffer[j++] = ch;
 		}
-		if ((ch == ' ' || ch == '\n' || Operator(ch) == 1 || Separators(ch) == 1) && (j != 0))
+
+		if ((ch == ' ' || ch == '\n' || (Operator(ch) == 1) || (Separators(ch) == 1)) && (j != 0))
 		{
 			buffer[j] = '\0';
 			j = 0;
-
+			
 			if (Keyword(buffer) == 1) {
 				cout << "Keyword:     " << buffer << endl;
 			}
 			else {
-					cout << "Identifier:  " << buffer << endl;
+				cout << "Identifier:  " << buffer << endl;
+
+
 			}
 		}
-		
 
 	}
 
