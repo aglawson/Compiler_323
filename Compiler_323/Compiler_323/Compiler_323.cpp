@@ -57,7 +57,7 @@ int Operator(char buffer) {
 }
 
 int Separators(char buffer) {
-	char separators[] = R"((){}[],.:;)";
+	char separators[] = R"((){}[],:;)";
 
 	int flag = 0;
 
@@ -69,11 +69,16 @@ int Separators(char buffer) {
 
 	return flag;
 }
-void readFile(string fileName) {
+
+//THIS PORTION OF CODE (LEXER) WAS WRITTEN WITH INFLUENCE FROM AN ONLINE SOURCE
+//SOURCE: https://www.thecrazyprogrammer.com/2017/02/lexical-analyzer-in-c.html
+void lexer(string fileName) {
 	char ch, buffer[15], operators[] = "+-*/%=";
 	
 	fstream file;
+	fstream write;
 	file.open(fileName);
+	write.open("output.txt");
 	int j = 0;
 	if (!file.is_open())
 	{
@@ -90,7 +95,7 @@ void readFile(string fileName) {
 			file.ignore(256, '!');
 		}
 
-		if (isalnum(ch) || ch == '$') {
+		if (isalnum(ch) || ch == '$' || ch == '.') {
 			buffer[j++] = ch;
 		}
 
@@ -101,22 +106,30 @@ void readFile(string fileName) {
 
 			if (Keyword(buffer) == 1) {
 				cout << "Keyword:     " << buffer << endl;
+				write << "Keyword:     " << buffer << endl;
 			}
 			else {
 				cout << "Identifier:  " << buffer << endl;
+				write << "Identifier:  " << buffer << endl;
+
 			}
 		}
 		
 		if (Separators(ch) == 1) {
 			cout << "Separator:   " << ch << endl;
+			write << "Separator:   " << ch << endl;
+
 		}
 
 		if (Operator(ch) == 1) {
 			cout << "Operator:    " << ch << endl;
+			write << "Operator:    " << ch << endl;
+
 		}
 	}
 
 	file.close();
+	write.close();
 }
 
 int main()
@@ -134,7 +147,7 @@ int main()
 		cout << "Enter file name: ";
 		cin >> fileName;
 		outputCode(fileName);
-		readFile(fileName);
+		lexer(fileName);
 		
 		break;
 	// If user wants to enter code from the terminal
@@ -163,8 +176,11 @@ int main()
 }
 
 /*		* * * * * O U T P U T * * * * *
+------------------------------------------------------------------
+					T E S T   C A S E   1  
+------------------------------------------------------------------
 Enter 'f' to input from a file or 't' to enter from terminal: f
-Enter file name: input.txt
+Enter file name: input1.txt
 CODE INPUTTED
 ! Find largest value between two numbers!
 int num1, num2, large$
@@ -205,9 +221,66 @@ Identifier:  num2$
 Separator:   ;
 Separator:   }
 
-C:\Users\adria\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 8264) exited with code 0.
-To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
-Press any key to close this window . . .
+-----------------------------------------------------------------------------------
+						T E S T   C A S E   2 
+-----------------------------------------------------------------------------------
+Enter 'f' to input from a file or 't' to enter from terminal: F
+Enter file name: input2.txt
+CODE INPUTTED
+! Second input file to test lexer !
+while (fahr < upper) a = 23.00 whileend 
 
+PARSED CODE
+TOKENS       LEXEMES
+Keyword:     while
+Separator:   (
+Identifier:  fahr
+Operator:    <
+Identifier:  upper
+Separator:   )
+Identifier:  a
+Operator:    =
+Identifier:  23.00
 
+--------------------------------------------------------------------------------------
+						T E S T  C A S E  3
+---------------------------------------------------------------------------------------
+Enter 'f' to input from a file or 't' to enter from terminal: f
+Enter file name: input3.txt
+CODE INPUTTED
+! Third input file to test lexer !
+! return true if one < four and false if one >= four !
+int one, two, three, four;
+		if(one < four) then output true; endif
+		else output false;
+ 
+
+PARSED CODE
+TOKENS       LEXEMES
+Keyword:     int
+Identifier:  one
+Separator:   ,
+Identifier:  two
+Separator:   ,
+Identifier:  three
+Separator:   ,
+Identifier:  four
+Separator:   ;
+Keyword:     if
+Separator:   (
+Identifier:  one
+Operator:    <
+Identifier:  four
+Separator:   )
+Keyword:     then
+Keyword:     output
+Keyword:     true
+Separator:   ;
+Keyword:     endif
+Keyword:     else
+Keyword:     output
+Keyword:     false
+Separator:   ;
+
+------------------------------------------------------------------------------
 */

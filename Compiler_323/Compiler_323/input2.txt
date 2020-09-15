@@ -1,0 +1,2 @@
+! Second input file to test lexer !
+while (fahr < upper) a = 23.00 whileend
