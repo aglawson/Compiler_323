@@ -2,15 +2,19 @@
 
 # HOW TO USE THIS PROGRAM
 
-# A sample input file is in the folder and solution. To compile the sample file:
+# Three sample files are in the folder and solution. 
+# input1.txt, input2.txt, and input3.txt
+# To compile the sample files:
 
 >run it 
 
 >type 'f' or 'F' and hit enter to read in file
 
->type in 'input.txt' and hit enter
+>type in 'input1.txt' or 'input2.txt' or 'input3.txt' and hit enter
 
 >program should run and identify keywords and symbols
+
+>output.txt will hold the program's output even after terminal is closed
 
 # To use your own file:
 
@@ -26,11 +30,15 @@
 
 >program should run, identifying keywords and symbols
 
+>output.txt will hold the program's output even after terminal is closed
+
+>NOTE: you may also edit the given input files for testing
+
 # To run code from the console (this function is not up and running yet, in progress):
 
 >run the code
 
->type the letter associated with running from the console and hit enter
+>type 't' or 'T' and hit enter
 
 >type in your code and hit enter when finished
 
