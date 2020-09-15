@@ -89,14 +89,6 @@ void readFile(string fileName) {
 		if (ch == '!') {
 			file.ignore(256, '!');
 		}
-		
-		if (Operator(ch) == 1) {
-			cout << "Operator:    " << ch << endl;
-		}
-
-		if (Separators(ch) == 1) {
-			cout << "Separator:   " << ch << endl;
-		}
 
 		if (isalnum(ch) || ch == '$') {
 			buffer[j++] = ch;
@@ -106,17 +98,22 @@ void readFile(string fileName) {
 		{
 			buffer[j] = '\0';
 			j = 0;
-			
+
 			if (Keyword(buffer) == 1) {
 				cout << "Keyword:     " << buffer << endl;
 			}
 			else {
 				cout << "Identifier:  " << buffer << endl;
-
-
 			}
 		}
+		
+		if (Separators(ch) == 1) {
+			cout << "Separator:   " << ch << endl;
+		}
 
+		if (Operator(ch) == 1) {
+			cout << "Operator:    " << ch << endl;
+		}
 	}
 
 	file.close();
@@ -164,3 +161,53 @@ int main()
 
 	return 0;
 }
+
+/*		* * * * * O U T P U T * * * * *
+Enter 'f' to input from a file or 't' to enter from terminal: f
+Enter file name: input.txt
+CODE INPUTTED
+! Find largest value between two numbers!
+int num1, num2, large$
+if(num1 > num2)
+{
+		large = num1$;
+}
+else
+{
+		large = num2$;
+} 
+
+PARSED CODE
+TOKENS       LEXEMES
+Keyword:     int
+Identifier:  num1
+Separator:   ,
+Identifier:  num2
+Separator:   ,
+Identifier:  large$
+Keyword:     if
+Separator:   (
+Identifier:  num1
+Operator:    >
+Identifier:  num2
+Separator:   )
+Separator:   {
+Identifier:  large
+Operator:    =
+Identifier:  num1$
+Separator:   ;
+Separator:   }
+Keyword:     else
+Separator:   {
+Identifier:  large
+Operator:    =
+Identifier:  num2$
+Separator:   ;
+Separator:   }
+
+C:\Users\adria\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 8264) exited with code 0.
+To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
+Press any key to close this window . . .
+
+
+*/
