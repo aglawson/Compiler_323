@@ -143,58 +143,31 @@ void lexer(string fileName) {
 
 int main()
 {
-
-	char choice;
+	char choice = 'f';
 	string fileName;
 	
-	cout << "Enter 'f' to input from a file or 't' to enter from terminal: ";
-	cin >> choice;
-		switch (choice) {
+	while (choice == 'f' || choice == 'F') {
+		cout << "Enter file name: ";
+		cin >> fileName;
+		outputCode(fileName);
+		lexer(fileName);
 
-			// If user wants to enter code from a .txt file
-		case 'f': case 'F':
-			while (choice == 'f' || choice == 'F') {
-				cout << "Enter file name: ";
-				cin >> fileName;
-				outputCode(fileName);
-				lexer(fileName);
-
-				cout << endl;
-				cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
-				cin >> choice;
-
-				cout <<"--------------------------------------------------------------------";
-				cout << endl << endl;
-				cout << "--------------------------------------------------------------------";
-				cout << endl;
-			}
-			break;
-			// If user wants to enter code from the terminal
-		case 't': case 'T':
-			cout << "Terminal capabilities are not implemented yet." << endl << endl;
-
-			//ofstream file;
-			//file.open("newfile.txt");
-			//if (!file.is_open()) {
-			//	cout << "Error: could not open file" << endl;
-			//	exit(0);
-			//}
-			//string program;
-			//cout << "Type program: " << endl;
-			//getline(cin, program, '\n');
-			//cout << program;
-			//file.close();
-			//string fileName = "newfile.txt";
-			//readFile(fileName);
+		cout << endl;
+		cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
+		cin >> choice;
+		if (choice != 'f' && choice != 'F') {
 			break;
 		}
-		
+		cout <<"--------------------------------------------------------------------";
+		cout << endl << endl;
+		cout << "--------------------------------------------------------------------";
+		cout << endl;
+	}
 
 	return 0;
 }
 
 /*		* * * * * O U T P U T * * * * *
-Enter 'f' to input from a file or 't' to enter from terminal: f
 Enter file name: input1.txt
 CODE INPUTTED
 ! Find largest value between two numbers!
@@ -297,16 +270,10 @@ Keyword:     output
 Keyword:     false
 Separator:   ;
 
-Enter 'f' or 'F' to run again, anything else to quit: f
---------------------------------------------------------------------
+Enter 'f' or 'F' to run again, anything else to quit: y
 
---------------------------------------------------------------------
-Enter file name: nonexistentfile.txt
-Error reading file
-
-C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 21928) exited with code 0.
+C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 10908) exited with code 0.
 To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
 Press any key to close this window . . .
-
 
 */
