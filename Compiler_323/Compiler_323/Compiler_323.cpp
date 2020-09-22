@@ -19,6 +19,7 @@ int Keyword(char buffer[])
 			break;
 		}
 	}
+
 	return flag;
 }
 
@@ -72,6 +73,7 @@ int Separators(char buffer) {
 
 //THIS PORTION OF CODE (LEXER) WAS WRITTEN WITH INFLUENCE FROM AN ONLINE SOURCE
 //SOURCE: https://www.thecrazyprogrammer.com/2017/02/lexical-analyzer-in-c.html
+//Lines of code influenced by this website will be marked with a comment '*' above
 void lexer(string fileName) {
 	char ch, buffer[15], operators[] = "+-*/%=";
 	
@@ -80,6 +82,7 @@ void lexer(string fileName) {
 	file.open(fileName);
 	write.open("output.txt");
 	int j = 0;
+	//*
 	if (!file.is_open())
 	{
 		cout << "Error, " << fileName << " could not be opened" << endl;
@@ -88,6 +91,7 @@ void lexer(string fileName) {
 	cout << "PARSED CODE" << endl;
 	cout << "TOKENS" << "       " << "LEXEMES" << endl;
 
+	//*
 	while (!file.eof()) {
 
 		ch = file.get();
@@ -95,19 +99,24 @@ void lexer(string fileName) {
 			file.ignore(256, '!');
 		}
 
+		//*
 		if (isalnum(ch) || ch == '$' || ch == '.') {
 			buffer[j++] = ch;
 		}
 
+		//*
 		if ((ch == ' ' || ch == '\n' || (Operator(ch) == 1) || (Separators(ch) == 1)) && (j != 0))
 		{
+			//*
 			buffer[j] = '\0';
+			//*
 			j = 0;
 
+			//*
 			if (Keyword(buffer) == 1) {
 				cout << "Keyword:     " << buffer << endl;
 				write << "Keyword:     " << buffer << endl;
-			}
+			}//*
 			else {
 				cout << "Identifier:  " << buffer << endl;
 				write << "Identifier:  " << buffer << endl;
@@ -137,48 +146,54 @@ int main()
 
 	char choice;
 	string fileName;
+	
 	cout << "Enter 'f' to input from a file or 't' to enter from terminal: ";
 	cin >> choice;
+		switch (choice) {
 
-	switch (choice) {
+			// If user wants to enter code from a .txt file
+		case 'f': case 'F':
+			while (choice == 'f' || choice == 'F') {
+				cout << "Enter file name: ";
+				cin >> fileName;
+				outputCode(fileName);
+				lexer(fileName);
 
-	// If user wants to enter code from a .txt file
-	case 'f': case 'F':
-		cout << "Enter file name: ";
-		cin >> fileName;
-		outputCode(fileName);
-		lexer(fileName);
+				cout << endl;
+				cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
+				cin >> choice;
+
+				cout <<"--------------------------------------------------------------------";
+				cout << endl << endl;
+				cout << "--------------------------------------------------------------------";
+				cout << endl;
+			}
+			break;
+			// If user wants to enter code from the terminal
+		case 't': case 'T':
+			cout << "Terminal capabilities are not implemented yet." << endl << endl;
+
+			//ofstream file;
+			//file.open("newfile.txt");
+			//if (!file.is_open()) {
+			//	cout << "Error: could not open file" << endl;
+			//	exit(0);
+			//}
+			//string program;
+			//cout << "Type program: " << endl;
+			//getline(cin, program, '\n');
+			//cout << program;
+			//file.close();
+			//string fileName = "newfile.txt";
+			//readFile(fileName);
+			break;
+		}
 		
-		break;
-	// If user wants to enter code from the terminal
-	case 't': case 'T':
-		cout << "Terminal capabilities are not implemented yet." << endl << endl;
-
-		//ofstream file;
-		//file.open("newfile.txt");
-		//if (!file.is_open()) {
-		//	cout << "Error: could not open file" << endl;
-		//	exit(0);
-		//}
-		//string program;
-		//cout << "Type program: " << endl;
-		//getline(cin, program, '\n');
-		//cout << program;
-		//file.close();
-		//string fileName = "newfile.txt";
-		//readFile(fileName);
-		break;
-	}
-
-
 
 	return 0;
 }
 
 /*		* * * * * O U T P U T * * * * *
-------------------------------------------------------------------
-					T E S T   C A S E   1  
-------------------------------------------------------------------
 Enter 'f' to input from a file or 't' to enter from terminal: f
 Enter file name: input1.txt
 CODE INPUTTED
@@ -221,10 +236,10 @@ Identifier:  num2$
 Separator:   ;
 Separator:   }
 
------------------------------------------------------------------------------------
-						T E S T   C A S E   2 
------------------------------------------------------------------------------------
-Enter 'f' to input from a file or 't' to enter from terminal: F
+Enter 'f' or 'F' to run again, anything else to quit: f
+--------------------------------------------------------------------
+
+--------------------------------------------------------------------
 Enter file name: input2.txt
 CODE INPUTTED
 ! Second input file to test lexer !
@@ -242,10 +257,10 @@ Identifier:  a
 Operator:    =
 Identifier:  23.00
 
---------------------------------------------------------------------------------------
-						T E S T  C A S E  3
----------------------------------------------------------------------------------------
-Enter 'f' to input from a file or 't' to enter from terminal: f
+Enter 'f' or 'F' to run again, anything else to quit: F
+--------------------------------------------------------------------
+
+--------------------------------------------------------------------
 Enter file name: input3.txt
 CODE INPUTTED
 ! Third input file to test lexer !
@@ -282,5 +297,16 @@ Keyword:     output
 Keyword:     false
 Separator:   ;
 
-------------------------------------------------------------------------------
+Enter 'f' or 'F' to run again, anything else to quit: f
+--------------------------------------------------------------------
+
+--------------------------------------------------------------------
+Enter file name: nonexistentfile.txt
+Error reading file
+
+C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 21928) exited with code 0.
+To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
+Press any key to close this window . . .
+
+
 */
