@@ -4,11 +4,12 @@
 
 # Three sample files are in the folder and solution. 
 # input1.txt, input2.txt, and input3.txt
-# To compile the sample files:
 
->run solution 
+#TO COMPILE A .TXT FILE
 
->type in 'input1.txt' or 'input2.txt' or 'input3.txt' and hit enter
+>run Compiler_323.exe file
+
+>type in the path for your desired file (included in my project:'input1.txt' 'input2.txt' 'input3.txt') and hit enter
 
 >program should run and identify keywords and symbols
 
@@ -16,22 +17,10 @@
 
 >enter 'f' or 'F' to enter another file
 
-# To use your own file:
+>continue the cycle as much as desired
 
->put your desired .txt file in Compiler_323 > Compiler_323 > Compiler_323 (or the 'Compiler_323' folder that is in the same folder as 'Compiler_323.sln')
+>NOTE: if the .exe file closes suddenly or returns an error message, it is likely because your path to your .txt file was incorrect
 
->drag and drop that same .txt file in the 'Resources' tab of your Visual Studio solution explorer
-
->run solution
-
->type in the name of your file, including the '.txt' and hit enter
-
->program should run, identifying keywords and symbols
-
->output.txt will hold the program's output even after terminal is closed
-
->enter 'f' or 'F' to enter another file
-
->NOTE: you may also edit the given input files for testing
+>double check your file path or move file to Desktop for a shorter and simpler path
 
 
