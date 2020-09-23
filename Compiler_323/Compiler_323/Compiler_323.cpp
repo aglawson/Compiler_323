@@ -70,7 +70,8 @@ void Compiler::outputCode(string filename) {
 	char line;
 	code.open(filename);
 	if (!code.is_open()) {
-		cout << "Error reading file" << endl;
+		cout << "Error reading file. File path entered is likely invalid." << endl;
+		system("PAUSE");
 		exit(0);
 	}
 
