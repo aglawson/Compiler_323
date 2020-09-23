@@ -1,5 +1,5 @@
 ! Third input file to test lexer !
 ! return true if one < four and false if one >= four !
 int one, two, three, four;
-	if(one < four) then output 100; endif
+	if(one < four) then output 100/10.5; endif
 	else output false;

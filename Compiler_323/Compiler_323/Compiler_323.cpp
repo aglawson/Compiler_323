@@ -99,7 +99,7 @@ int Compiler::isNum(char buffer) {
 //SOURCE: https://www.thecrazyprogrammer.com/2017/02/lexical-analyzer-in-c.html
 //Lines of code influenced by this website will be marked with a comment '*' above
 void Compiler::lexer(string fileName) {
-	char ch, buffer[15], operators[] = "+-*/%=";
+	char ch, buffer[15];
 	fstream file;
 	fstream write;
 	file.open(fileName);
@@ -210,7 +210,6 @@ int main()
 		cout << endl;
 	}
 
-	return 0;
 }
 
 /*		* * * * * O U T P U T * * * * *
