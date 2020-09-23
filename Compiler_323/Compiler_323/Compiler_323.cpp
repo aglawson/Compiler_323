@@ -6,7 +6,18 @@
 #include <string>
 using namespace std;
 
-int Keyword(char buffer[])
+
+class Compiler {
+public:
+	int Keyword(char buffer[]);
+	int Operator(char buffer);
+	int Separators(char buffer);
+	int isNum(char buffer);
+	void lexer(string fileName);
+	void outputCode(string filename);
+
+};
+int Compiler::Keyword(char buffer[])
 {
 	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not"};
 
@@ -23,7 +34,38 @@ int Keyword(char buffer[])
 	return flag;
 }
 
-void outputCode(string filename) {
+
+
+int Compiler::Operator(char buffer) {
+	char operators[] = { '+', '=', '-', '/', '*', '%', '<', '>' };
+
+	int flag = 0;
+
+	for (int i = 0; i < 8; i++) {
+		if (buffer == operators[i]) {
+			flag = 1;
+			break;
+		}
+	}
+
+	return flag;
+}
+
+int Compiler::Separators(char buffer) {
+	char separators[] = R"((){}[],:;)";
+
+	int flag = 0;
+
+	for (int i = 0; i < sizeof(separators); i++) {
+		if (buffer == separators[i]) {
+			flag = 1;
+		}
+	}
+
+	return flag;
+}
+
+void Compiler::outputCode(string filename) {
 	fstream code;
 	char line;
 	code.open(filename);
@@ -42,41 +84,22 @@ void outputCode(string filename) {
 	code.close();
 }
 
-int Operator(char buffer) {
-	char operators[] = { '+', '=', '-', '/', '*', '%', '<', '>' };
-
-	int flag = 0;
-
-	for (int i = 0; i < 8; i++) {
-		if (buffer == operators[i]) {
-			flag = 1;
-			break;
+int Compiler::isNum(char buffer) {
+	char numbers[10] = { '0','1','2','3','4','5','6','7','8','9' };
+	for (int i = 0; i < 10; i++) {
+		if (buffer == numbers[i]) {
+			return 1;
 		}
 	}
 
-	return flag;
-}
-
-int Separators(char buffer) {
-	char separators[] = R"((){}[],:;)";
-
-	int flag = 0;
-
-	for (int i = 0; i < sizeof(separators); i++) {
-		if (buffer == separators[i]) {
-			flag = 1;
-		}
-	}
-
-	return flag;
+	return 0;
 }
 
 //THIS PORTION OF CODE (LEXER) WAS WRITTEN WITH INFLUENCE FROM AN ONLINE SOURCE
 //SOURCE: https://www.thecrazyprogrammer.com/2017/02/lexical-analyzer-in-c.html
 //Lines of code influenced by this website will be marked with a comment '*' above
-void lexer(string fileName) {
+void Compiler::lexer(string fileName) {
 	char ch, buffer[15], operators[] = "+-*/%=";
-	
 	fstream file;
 	fstream write;
 	file.open(fileName);
@@ -103,24 +126,44 @@ void lexer(string fileName) {
 		if (isalnum(ch) || ch == '$' || ch == '.') {
 			buffer[j++] = ch;
 		}
-
 		//*
 		if ((ch == ' ' || ch == '\n' || (Operator(ch) == 1) || (Separators(ch) == 1)) && (j != 0))
 		{
+			int i = 0;
+			bool isFloat = false;
 			//*
 			buffer[j] = '\0';
 			//*
 			j = 0;
+
+			if (isNum(buffer[0]) == 1) {
+				cout << "Number:      ";
+				while (buffer[i] != NULL) {
+					cout << buffer[i];
+					if (buffer[i] == '.') {
+						isFloat = true;
+					}
+					i++;
+				}
+				if (isFloat == true) {
+					cout << "(float)";
+				}
+				else {
+					cout << "(int)";
+				}
+				cout << endl;
+			}
 
 			//*
 			if (Keyword(buffer) == 1) {
 				cout << "Keyword:     " << buffer << endl;
 				write << "Keyword:     " << buffer << endl;
 			}//*
-			else {
-				cout << "Identifier:  " << buffer << endl;
-				write << "Identifier:  " << buffer << endl;
-
+			else{
+				if (isNum(buffer[0]) == 0) {
+					cout << "Identifier:  " << buffer << endl;
+					write << "Identifier:  " << buffer << endl;
+				}
 			}
 		}
 		
@@ -143,14 +186,17 @@ void lexer(string fileName) {
 
 int main()
 {
+	Compiler c;
 	char choice = 'f';
 	string fileName;
-	
+
+
+
 	while (choice == 'f' || choice == 'F') {
 		cout << "Enter file name: ";
 		cin >> fileName;
-		outputCode(fileName);
-		lexer(fileName);
+		c.outputCode(fileName);
+		c.lexer(fileName);
 
 		cout << endl;
 		cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
@@ -228,9 +274,9 @@ Identifier:  upper
 Separator:   )
 Identifier:  a
 Operator:    =
-Identifier:  23.00
+Number:      23.00(float)
 
-Enter 'f' or 'F' to run again, anything else to quit: F
+Enter 'f' or 'F' to run again, anything else to quit: f
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
@@ -239,7 +285,7 @@ CODE INPUTTED
 ! Third input file to test lexer !
 ! return true if one < four and false if one >= four !
 int one, two, three, four;
-		if(one < four) then output true; endif
+		if(one < four) then output 100; endif
 		else output false;
  
 
@@ -262,7 +308,7 @@ Identifier:  four
 Separator:   )
 Keyword:     then
 Keyword:     output
-Keyword:     true
+Number:      100(int)
 Separator:   ;
 Keyword:     endif
 Keyword:     else
@@ -270,9 +316,9 @@ Keyword:     output
 Keyword:     false
 Separator:   ;
 
-Enter 'f' or 'F' to run again, anything else to quit: y
+Enter 'f' or 'F' to run again, anything else to quit: j
 
-C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 10908) exited with code 0.
+C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 12168) exited with code 0.
 To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
 Press any key to close this window . . .
 
