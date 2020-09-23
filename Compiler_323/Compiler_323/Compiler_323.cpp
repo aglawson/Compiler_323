@@ -194,7 +194,7 @@ int main()
 
 
 	while (choice == 'f' || choice == 'F') {
-		cout << "Enter file name: ";
+		cout << "Enter file path (example: C:\Users\you\Desktop\...): ";
 		cin >> fileName;
 		c.outputCode(fileName);
 		c.lexer(fileName);
