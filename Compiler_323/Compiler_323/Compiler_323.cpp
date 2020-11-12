@@ -7,6 +7,7 @@
 using namespace std;
 
 
+
 class Compiler {
 public:
 	int Keyword(char buffer[]);
@@ -16,7 +17,73 @@ public:
 	void lexer(string fileName);
 	void outputCode(string filename);
 
+	//stack implementation
+	char stack[100];
+	int top;
+	void initializeStack() {
+		stack[0] = '$';
+		top = 0;
+	}
+	bool isEmpty() {
+		if (stack[top] == '$') {
+			return true;
+		}
+		else
+			return false;
+	}
+	void push(char a) {
+		++top;
+		stack[top] = a;
+	}
+	void display(char stack[]) {
+		if (isEmpty()) {
+			cout << "Stack is Empty" << endl << endl;
+		}
+		else
+		{
+			cout << "Stack Content: ";
+			for (int i = top; i >= 0; i--) {
+				cout << stack[i];
+			}
+			cout << endl << endl;
+		}
+	}
+	void pop() {
+		int temp;
+		if (isEmpty()) {
+			cout << "Stack is Empty" << endl << endl;
+			return;
+		}
+		temp = stack[top];
+		top--;
+		cout << temp << " has been popped" << endl << endl;
+		
+	}
+
+	void stackParser();
 };
+
+void Compiler::stackParser() {
+	if (isEmpty()) {
+		cout << "Cannot Parse, Stack Empty" << endl << endl;
+		return;
+	}
+	/*
+		O - Operator
+		I - Identifier
+		S - Separator
+		N - Number
+		K - Keyword
+
+		K -> I,N,S
+		I -> O,N 
+		N -> O,N 
+		S -> I,N
+		O -> N
+		
+	*/
+
+}
 int Compiler::Keyword(char buffer[])
 {
 	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not"};
@@ -153,17 +220,23 @@ void Compiler::lexer(string fileName) {
 					cout << "(int)";
 				}
 				cout << endl;
+
+				push('N');
 			}
 
 			//*
 			if (Keyword(buffer) == 1) {
 				cout << "Keyword:     " << buffer << endl;
 				write << "Keyword:     " << buffer << endl;
+
+				push('K');
 			}//*
 			else{
 				if (isNum(buffer[0]) == 0) {
 					cout << "Identifier:  " << buffer << endl;
 					write << "Identifier:  " << buffer << endl;
+
+					push('I');
 				}
 			}
 		}
@@ -172,12 +245,14 @@ void Compiler::lexer(string fileName) {
 			cout << "Separator:   " << ch << endl;
 			write << "Separator:   " << ch << endl;
 
+			push('S');
 		}
 
 		if (Operator(ch) == 1) {
 			cout << "Operator:    " << ch << endl;
 			write << "Operator:    " << ch << endl;
 
+			push('O');
 		}
 	}
 
@@ -192,12 +267,14 @@ int main()
 	string fileName;
 
 
-
 	while (choice == 'f' || choice == 'F') {
+		c.initializeStack();
+
 		cout << "Enter file path: ";
 		cin >> fileName;
 		c.outputCode(fileName);
 		c.lexer(fileName);
+		c.display(c.stack);
 
 		cout << endl;
 		cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
@@ -205,10 +282,13 @@ int main()
 		if (choice != 'f' && choice != 'F') {
 			break;
 		}
+
 		cout <<"--------------------------------------------------------------------";
 		cout << endl << endl;
 		cout << "--------------------------------------------------------------------";
 		cout << endl;
+
+
 	}
 
 }
