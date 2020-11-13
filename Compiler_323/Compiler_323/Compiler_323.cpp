@@ -75,14 +75,100 @@ void Compiler::stackParser() {
 		N - Number
 		K - Keyword
 
-		K -> I,N,S
-		I -> O,N 
-		N -> O,N 
-		S -> I,N
-		O -> N
+		K -> I,N,S,K
+		I -> O,N,S,K
+		N -> O,N,K
+		S -> I,N,K,S
+		O -> N,I
 		
 	*/
-
+	int upper = top;
+	bool isCorrect = true;
+	while (stack[upper] != '$') {
+		if (isEmpty()) {
+			break;
+		}
+		if (stack[upper] == 'K') {
+			upper--;
+			if (stack[upper] == 'I' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
+				upper--;
+			}
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				break;
+			}
+		}
+		if (stack[upper] == 'I') {
+			upper--;
+			if (stack[upper] == 'O' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
+				upper--;
+			}
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				break;
+			}
+		}
+		if (stack[upper] == 'N') {
+			upper--;
+			if (stack[upper] == 'O' || stack[upper] == 'N' || stack[upper] == 'K') {
+				upper--;
+			}
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;
+				isCorrect = false;
+				break;
+			}
+		}
+		if (stack[upper] == 'S') {
+			upper--;
+			if (stack[upper] == 'I' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
+				upper--;
+			}
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				break;
+			}
+		}
+		if (stack[upper] == 'O') {
+			upper--;
+			if (stack[upper] == 'N' || stack[upper] == 'I') {
+				upper--;
+			}
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				break;
+			}
+		}
+	}
+	if (isCorrect) {
+		cout << "Syntactically correct!" << endl << endl;
+	}
+	
 }
 int Compiler::Keyword(char buffer[])
 {
@@ -275,7 +361,7 @@ int main()
 		c.outputCode(fileName);
 		c.lexer(fileName);
 		c.display(c.stack);
-
+		c.stackParser();
 		cout << endl;
 		cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
 		cin >> choice;
