@@ -61,6 +61,13 @@ public:
 	}
 
 	void stackParser();
+	bool isCorrect = true;
+	void setIsCorrect(bool x) {
+		isCorrect = x;
+	}
+	bool getIsCorrect() {
+		return isCorrect;
+	}
 };
 
 void Compiler::stackParser() {
@@ -82,8 +89,17 @@ void Compiler::stackParser() {
 		O -> N,I
 		
 	*/
+	fstream write;
+	write.open("syntaxoutput.txt");
+
+	cout << "Abbreviations: " << endl;
+	cout << "O - Operator" << endl;
+	cout << "I - Identifier" << endl;
+	cout << "S - Separator" << endl;
+	cout << "N - Number" << endl;
+	cout << "K - Keyword" << endl;
+
 	int upper = top;
-	bool isCorrect = true;
 	while (stack[upper] != '$') {
 		if (isEmpty()) {
 			break;
@@ -98,8 +114,11 @@ void Compiler::stackParser() {
 					break;
 				}
 				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
-				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				cout << " cannot precede " << stack[upper] << endl;	
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
 				break;
 			}
 		}
@@ -113,8 +132,11 @@ void Compiler::stackParser() {
 					break;
 				}
 				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
-				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				cout << " cannot precede " << stack[upper] << endl;
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
 				break;
 			}
 		}
@@ -128,9 +150,11 @@ void Compiler::stackParser() {
 					break;
 				}
 				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
 				cout << " cannot precede " << stack[upper] << endl;
-				isCorrect = false;
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
 				break;
 			}
 		}
@@ -144,8 +168,11 @@ void Compiler::stackParser() {
 					break;
 				}
 				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
-				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				cout << " cannot precede " << stack[upper] << endl;
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
 				break;
 			}
 		}
@@ -159,16 +186,20 @@ void Compiler::stackParser() {
 					break;
 				}
 				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
-				cout << " cannot precede " << stack[upper] << endl;				isCorrect = false;
+				cout << " cannot precede " << stack[upper] << endl;
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
 				break;
 			}
 		}
 	}
 	if (isCorrect) {
-		cout << "Syntactically correct!" << endl << endl;
+		cout << "Syntactically Correct!" << endl << endl;
+		write << endl <<"Syntactically Correct!" << endl;
 	}
-	
+	write.close();
 }
 int Compiler::Keyword(char buffer[])
 {
@@ -241,9 +272,9 @@ void Compiler::outputCode(string filename) {
 int Compiler::isNum(char buffer) {
 	char numbers[10] = { '0','1','2','3','4','5','6','7','8','9' };
 	for (int i = 0; i < 10; i++) {
-		if (buffer == numbers[i]) {
-			return 1;
-		}
+if (buffer == numbers[i]) {
+	return 1;
+}
 	}
 
 	return 0;
@@ -258,6 +289,7 @@ void Compiler::lexer(string fileName) {
 	fstream write;
 	file.open(fileName);
 	write.open("output.txt");
+
 	int j = 0;
 	//*
 	if (!file.is_open())
@@ -317,7 +349,7 @@ void Compiler::lexer(string fileName) {
 
 				push('K');
 			}//*
-			else{
+			else {
 				if (isNum(buffer[0]) == 0) {
 					cout << "Identifier:  " << buffer << endl;
 					write << "Identifier:  " << buffer << endl;
@@ -326,7 +358,7 @@ void Compiler::lexer(string fileName) {
 				}
 			}
 		}
-		
+
 		if (Separators(ch) == 1) {
 			cout << "Separator:   " << ch << endl;
 			write << "Separator:   " << ch << endl;
@@ -340,6 +372,10 @@ void Compiler::lexer(string fileName) {
 
 			push('O');
 		}
+	}
+	write << "Stack Content: ";
+	for (int i = top; i >= 0; i--){
+		write << stack[i];
 	}
 
 	file.close();
@@ -380,7 +416,7 @@ int main()
 }
 
 /*		* * * * * O U T P U T * * * * *
-Enter file name: input1.txt
+Enter file path: input1.txt
 CODE INPUTTED
 ! Find largest value between two numbers!
 int num1, num2, large$
@@ -420,13 +456,22 @@ Operator:    =
 Identifier:  num2$
 Separator:   ;
 Separator:   }
+Stack Content: SSIOISKSSIOISSIOISKISISIK$
 
-Enter 'f' or 'F' to run again, anything else to quit: f
+Abbreviations:
+O - Operator
+I - Identifier
+S - Separator
+N - Number
+K - Keyword
+Syntactically Correct!
+
+
+Enter 'f' or 'F' to run again, anything else to quit: f input2.txt
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
-Enter file name: input2.txt
-CODE INPUTTED
+Enter file path: CODE INPUTTED
 ! Second input file to test lexer !
 while (fahr < upper) a = 23.00 whileend 
 
@@ -441,17 +486,26 @@ Separator:   )
 Identifier:  a
 Operator:    =
 Number:      23.00(float)
+Stack Content: NOISIOISK$
 
-Enter 'f' or 'F' to run again, anything else to quit: f
+Abbreviations:
+O - Operator
+I - Identifier
+S - Separator
+N - Number
+K - Keyword
+Syntactically Correct!
+
+
+Enter 'f' or 'F' to run again, anything else to quit: f input3.txt
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
-Enter file name: input3.txt
-CODE INPUTTED
+Enter file path: CODE INPUTTED
 ! Third input file to test lexer !
 ! return true if one < four and false if one >= four !
 int one, two, three, four;
-		if(one < four) then output 100; endif
+		if(one <= four) then output 100/10.5; endif
 		else output false;
  
 
@@ -470,21 +524,57 @@ Keyword:     if
 Separator:   (
 Identifier:  one
 Operator:    <
+Operator:    =
 Identifier:  four
 Separator:   )
 Keyword:     then
 Keyword:     output
 Number:      100(int)
+Operator:    /
+Number:      10.5(float)
 Separator:   ;
 Keyword:     endif
 Keyword:     else
 Keyword:     output
 Keyword:     false
 Separator:   ;
+Stack Content: SKKKKSNONKKSIOOISKSISISISIK$
+
+Abbreviations:
+O - Operator
+I - Identifier
+S - Separator
+N - Number
+K - Keyword
+Syntactically Correct!
+
+
+Enter 'f' or 'F' to run again, anything else to quit: f input4.txt
+--------------------------------------------------------------------
+
+--------------------------------------------------------------------
+Enter file path: CODE INPUTTED
+! This is to test a case where the syntax fails !
+
+if + 
+
+PARSED CODE
+TOKENS       LEXEMES
+Keyword:     if
+Operator:    +
+Stack Content: OK$
+
+Abbreviations:
+O - Operator
+I - Identifier
+S - Separator
+N - Number
+K - Keyword
+Syntactically incorrect: K cannot precede O
 
 Enter 'f' or 'F' to run again, anything else to quit: j
 
-C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 12168) exited with code 0.
+C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 21836) exited with code 0.
 To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
 Press any key to close this window . . .
 

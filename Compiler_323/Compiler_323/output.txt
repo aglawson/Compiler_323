@@ -1,26 +1,3 @@
 Keyword:     if
 Operator:    +
-e
-Separator:   ,
-Identifier:  two
-Separator:   ,
-Identifier:  three
-Separator:   ,
-Identifier:  four
-Separator:   ;
-Keyword:     if
-Separator:   (
-Identifier:  one
-Operator:    <
-Identifier:  four
-Separator:   )
-Keyword:     then
-Keyword:     output
-Operator:    /
-Separator:   ;
-Keyword:     endif
-Keyword:     else
-Keyword:     output
-Keyword:     false
-Separator:   ;
-rator:   }
+Stack Content: OK$
