@@ -92,6 +92,10 @@ void Compiler::stackParser() {
 	fstream write;
 	write.open("syntaxoutput.txt");
 
+	write << "Stack Content: ";
+	for (int i = top; i >= 0; i--) {
+		write << stack[i];
+	}
 	cout << "Abbreviations: " << endl;
 	cout << "O - Operator" << endl;
 	cout << "I - Identifier" << endl;

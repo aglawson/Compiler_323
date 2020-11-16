@@ -1,1 +1,2 @@
-Syntactically incorrect: K cannot precede O
+Stack Content: SSIOISKSSIOISSIOISKISISIK$
+Syntactically Correct!
