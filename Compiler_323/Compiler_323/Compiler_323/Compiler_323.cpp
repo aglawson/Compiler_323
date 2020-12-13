@@ -37,24 +37,27 @@ public:
 	}
 	void display(char stack[]) {
 		if (isEmpty()) {
-			std::cout << "Stack is Empty" << endl << endl;
+			cout << "Stack is Empty" << endl << endl;
 		}
 		else
 		{
-			std::cout << "Stack Content: ";
+			cout << "Stack Content: ";
 			for (int i = top; i >= 0; i--) {
-				std::cout << stack[i];
+				cout << stack[i];
 			}
-			std::cout << endl << endl;
+			cout << endl << endl;
 		}
 	}
 	void pop() {
 		int temp;
 		if (isEmpty()) {
+			cout << "Stack is Empty" << endl << endl;
 			return;
 		}
 		temp = stack[top];
-		top--;		
+		top--;
+		cout << temp << " has been popped" << endl << endl;
+		
 	}
 
 	void stackParser();
@@ -65,14 +68,11 @@ public:
 	bool getIsCorrect() {
 		return isCorrect;
 	}
-
-	string Types[1000];
-
 };
 
 void Compiler::stackParser() {
 	if (isEmpty()) {
-		std::cout << "Cannot Parse, Stack Empty" << endl << endl;
+		cout << "Cannot Parse, Stack Empty" << endl << endl;
 		return;
 	}
 	/*
@@ -96,34 +96,34 @@ void Compiler::stackParser() {
 	for (int i = top; i >= 0; i--) {
 		write << stack[i];
 	}
-	std::cout << "Abbreviations: " << endl;
-	std::cout << "O - Operator" << endl;
-	std::cout << "I - Identifier" << endl;
-	std::cout << "S - Separator" << endl;
-	std::cout << "N - Number" << endl;
-	std::cout << "K - Keyword" << endl;
+	cout << "Abbreviations: " << endl;
+	cout << "O - Operator" << endl;
+	cout << "I - Identifier" << endl;
+	cout << "S - Separator" << endl;
+	cout << "N - Number" << endl;
+	cout << "K - Keyword" << endl;
 
 	int upper = top;
-	while (stack[upper] != '$' && stack[upper] != ' ') {
+	while (stack[upper] != '$') {
+		if (isEmpty()) {
+			break;
+		}
 		if (stack[upper] == 'K') {
 			upper--;
-			if (stack[upper] == 'I' || stack[upper] =='S' || stack[upper] == 'K') {
+			if (stack[upper] == 'I' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
 				upper--;
 			}
 			else {
-				if (stack[upper] == '$' || stack[upper] == ' ') {
+				if (stack[upper] == '$') {
 					break;
 				}
-				else {
-					write << "Syntactical Error at Significant term #" << upper << endl;
-					cout << "Syntactical Error at Significant term #" << upper << endl;
-					cout << stack[upper];
-					upper++;
-					std::cout << " cannot precede " << stack[upper] << endl;
-					write << " cannot precede " << stack[upper] << endl;
-					setIsCorrect(false);
-					break;
-				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;	
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
+				break;
 			}
 		}
 		if (stack[upper] == 'I') {
@@ -132,55 +132,49 @@ void Compiler::stackParser() {
 				upper--;
 			}
 			else {
-				if (stack[upper] == '$' || stack[upper] == ' ') {
+				if (stack[upper] == '$') {
 					break;
 				}
-				else {
-					write << "Syntactical Error at Significant term #" << upper << endl;
-					cout << "Syntactical Error at Significant term #" << upper << endl;
-					cout << stack[upper];
-					upper++;
-					std::cout << " cannot precede " << stack[upper] << endl;
-					write << " cannot precede " << stack[upper] << endl;
-					setIsCorrect(false);
-					break;
-				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
+				break;
 			}
 		}
 		if (stack[upper] == 'N') {
 			upper--;
-			if (stack[upper] == 'O' || stack[upper] == 'N' || stack[upper] == 'K' || stack[upper] == 'I' || stack[upper] == 'S') {
+			if (stack[upper] == 'O' || stack[upper] == 'N' || stack[upper] == 'K') {
 				upper--;
 			}
 			else {
-				if (stack[upper] == '$' || stack[upper] == ' ') {
+				if (stack[upper] == '$') {
 					break;
 				}
-				else {
-					write << "Syntactical Error at Significant term #" << upper << endl;
-					cout << "Syntactical Error at Significant term #" << upper << endl;
-					cout << stack[upper];
-					upper++;
-					std::cout << " cannot precede " << stack[upper] << endl;
-					write << " cannot precede " << stack[upper] << endl;
-					setIsCorrect(false);
-					break;
-				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
+				upper++;
+				cout << " cannot precede " << stack[upper] << endl;
+				write << " cannot precede " << stack[upper] << endl;
+				setIsCorrect(false);
+				break;
 			}
 		}
 		if (stack[upper] == 'S') {
 			upper--;
-			if (stack[upper] == '$' || stack[upper] == ' ') {
-				break;
-			}else
 			if (stack[upper] == 'I' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
 				upper--;
-			}else{
-				write << "Syntactical Error at Significant term #" << upper << endl;
-				cout << "Syntactical Error at Significant term #" << upper << endl;
-				cout << stack[upper];
+			}
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
-				std::cout << " cannot precede " << stack[upper] << endl;
+				cout << " cannot precede " << stack[upper] << endl;
 				write << " cannot precede " << stack[upper] << endl;
 				setIsCorrect(false);
 				break;
@@ -188,31 +182,29 @@ void Compiler::stackParser() {
 		}
 		if (stack[upper] == 'O') {
 			upper--;
-			if (stack[upper] == '$' || stack[upper] == ' ') {
-				break;
-			}else	
 			if (stack[upper] == 'N' || stack[upper] == 'I') {
 				upper--;
 			}
-			else { 
-				write << "Syntactical Error at Significant term #" << upper << endl;
-				cout << "Syntactical Error at Significant term #" << upper << endl;
-				cout << stack[upper];
+			else {
+				if (stack[upper] == '$') {
+					break;
+				}
+				cout << "Syntactically incorrect: " << stack[upper];
+				write << "Syntactically incorrect: " << stack[upper];
 				upper++;
-				std::cout << " cannot precede " << stack[upper] << endl;
+				cout << " cannot precede " << stack[upper] << endl;
 				write << " cannot precede " << stack[upper] << endl;
 				setIsCorrect(false);
 				break;
 			}
 		}
 	}
-	if (getIsCorrect() == true) {
+	if (isCorrect) {
 		cout << "Syntactically Correct!" << endl << endl;
 		write << endl <<"Syntactically Correct!" << endl;
 	}
 	write.close();
 }
-
 int Compiler::Keyword(char buffer[])
 {
 	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not"};
