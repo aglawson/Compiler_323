@@ -1,2 +1,2 @@
-Stack Content: SSIOISKSSIOISSIOISKISISIK$
-Syntactically Correct!
+Stack Content: SSNOISNOISOKSNONSSNONSK$Syntactical Error at Significant term #12
+ cannot precede O
