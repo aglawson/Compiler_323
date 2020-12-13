@@ -2,10 +2,10 @@
 
 # HOW TO USE THIS PROGRAM
 
-# Three sample files are in the folder and solution. 
-# input1.txt, input2.txt, and input3.txt
-
-#TO COMPILE A .TXT FILE
+# Four sample files are in the folder and solution. 
+# input1.txt, input2.txt, input3.txt, and input4.txt
+# The first three files are test cases for correct syntax, the last is a test case for incorrect syntax
+# TO COMPILE A .TXT FILE
 
 >run Compiler_323.exe file
 
