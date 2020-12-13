@@ -1,3 +1,9 @@
 ! This is to test a case where the syntax fails !
 
-if +
+if(3 > 1) {
+	4 + 2;
+	if +;
+	blah = 0;
+	no = 1;
+
+}
