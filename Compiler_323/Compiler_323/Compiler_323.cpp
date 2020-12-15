@@ -31,10 +31,14 @@ public:
 		else
 			return false;
 	}
+
+	//pushes onto the stack a letter representing a token type
 	void push(char a) {
 		++top;
 		stack[top] = a;
 	}
+
+	//displays the contents of the stack
 	void display(char stack[]) {
 		if (isEmpty()) {
 			std::cout << "Stack is Empty" << endl << endl;
@@ -48,6 +52,8 @@ public:
 			std::cout << endl << endl;
 		}
 	}
+
+	//removes the top-most member of the stack
 	void pop() {
 		int temp;
 		if (isEmpty()) {
@@ -59,36 +65,60 @@ public:
 
 	void stackParser();
 	bool isCorrect = true;
+
+	//sets the value representing the correctness of the syntax
+	//True = correct, False = incorrect syntax
 	void setIsCorrect(bool x) {
 		isCorrect = x;
 	}
+
+	//outputs the value of the bool representing the correctness of the syntax
 	bool getIsCorrect() {
 		return isCorrect;
 	}
 
 	string Types[100];
+
+	//array of strings to store numbers in the user's code
 	string storedNumbers[100];
+	//initializes storage location
 	int storageLocation = 0;
+	//function to store a number in the above array of strings
 	void storeNumbers(string input) {
 		cout << input << " stored at location: " << storageLocation << endl;
+		//increments to the next available storage location
 		storageLocation++;
 	}
 
+	//outputs the contents of the storage location specified by the user
 	void retrieveNumbers() {
 		int requestedLocation = 100;
 		while (requestedLocation != -1) {
 			cout << "Enter location of number to retrieve or -1 to quit: ";
 			cin >> requestedLocation;
-			if (requestedLocation >= storageLocation) {
-				cout << "Requested location is empty" << endl;
+			//if the user's desired location is greater than or equal to the last
+			//value of the storage location, then that location is empty
+			
+			if (requestedLocation >= storageLocation) {					//I implemented it this way rather than checking the specific memory location and checking if it is null
+				cout << "Requested location is empty" << endl;			//because if the user inputs values that are outside the scope of the array, it breaks the program.
+																		//This way, it performs the same function without the danger of breaking the program.
 			}
 			else
 			{
-				cout << storedNumbers[requestedLocation] << endl;
+				//if a negative number (other than the 'quit' number) is entered.
+				if (requestedLocation < -1) {
+					cout << "Invalid location entered" << endl;
+				}
+				else
+				{
+					cout << storedNumbers[requestedLocation] << endl;	
+				}
 			}
+			
 		}
 	}
 
+	//function to clear the memory after each iteration
 	void clearMemory() {
 		for (int i = 0; i < storageLocation; i++) {
 			storedNumbers[i] = "";
@@ -131,6 +161,7 @@ void Compiler::stackParser() {
 	std::cout << "K - Keyword" << endl;
 
 	int upper = top;
+	//top-down stack parser
 	while (stack[upper] != '$') {
 		if (stack[upper] == 'K') {
 			upper--;
@@ -236,6 +267,7 @@ void Compiler::stackParser() {
 				}
 		}
 	}
+	//if the value representing the syntax correctness has not been set to false
 	if (getIsCorrect() == true) {
 		cout << "Syntactically Correct!" << endl << endl;
 		write << endl << "Syntactically Correct!" << endl;
@@ -243,6 +275,7 @@ void Compiler::stackParser() {
 	write.close();
 }
 
+//determines if the lexeme is a keyword
 int Compiler::Keyword(char buffer[])
 {
 	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not" };
@@ -261,7 +294,7 @@ int Compiler::Keyword(char buffer[])
 }
 
 
-
+//determines if the lexeme is an operator
 int Compiler::Operator(char buffer) {
 	char operators[] = { '+', '=', '-', '/', '*', '%', '<', '>' };
 
@@ -277,6 +310,7 @@ int Compiler::Operator(char buffer) {
 	return flag;
 }
 
+//determines if the lexeme is a separator
 int Compiler::Separators(char buffer) {
 	char separators[] = R"((){}[],:;)";
 
@@ -291,6 +325,19 @@ int Compiler::Separators(char buffer) {
 	return flag;
 }
 
+//determines if the lexeme is a number
+int Compiler::isNum(char buffer) {
+	char numbers[10] = { '0','1','2','3','4','5','6','7','8','9' };
+	for (int i = 0; i < 10; i++) {
+		if (buffer == numbers[i]) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+//outputs the code as entered by the user
 void Compiler::outputCode(string filename) {
 	fstream code;
 	char line;
@@ -311,16 +358,6 @@ void Compiler::outputCode(string filename) {
 	code.close();
 }
 
-int Compiler::isNum(char buffer) {
-	char numbers[10] = { '0','1','2','3','4','5','6','7','8','9' };
-	for (int i = 0; i < 10; i++) {
-		if (buffer == numbers[i]) {
-			return 1;
-		}
-	}
-
-	return 0;
-}
 
 //THIS PORTION OF CODE (LEXER) WAS WRITTEN WITH INFLUENCE FROM AN ONLINE SOURCE
 //SOURCE: https://www.thecrazyprogrammer.com/2017/02/lexical-analyzer-in-c.html
@@ -428,13 +465,15 @@ void Compiler::lexer(string fileName) {
 	write.close();
 }
 
+
+//This is where the magic happens!
 int main()
 {
 	Compiler c;
 	char choice = 'f';
 	string fileName;
 
-
+	//while the user wants to continue to enter files
 	while (choice == 'f' || choice == 'F') {
 		c.initializeStack();
 
@@ -475,7 +514,7 @@ if(num1 > num2)
 else
 {
 		large = num2$;
-} 
+}Â 
 
 PARSED CODE
 TOKENS       LEXEMES
@@ -526,7 +565,7 @@ Enter 'f' or 'F' to run again, anything else to quit: f
 Enter file path: input2.txt
 CODE INPUTTED
 ! Second input file to test lexer !
-while (fahr < upper) a = 23.00 whileend 
+while (fahr < upper) a = 23.00 whileendÂ 
 
 PARSED CODE
 TOKENS       LEXEMES
@@ -568,7 +607,7 @@ CODE INPUTTED
 int one, two, three, four;
 		if(one <= four) then output 100/10.5; endif
 		else output false;
- 
+Â 
 
 PARSED CODE
 TOKENS       LEXEMES
@@ -634,7 +673,7 @@ if(3 > 1) {
 		blah = 0;
 		no = 1;
 
-} 
+}Â 
 
 PARSED CODE
 TOKENS       LEXEMES
