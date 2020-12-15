@@ -515,11 +515,16 @@ K - Keyword
 Syntactically Correct!
 
 
-Enter 'f' or 'F' to run again, anything else to quit: f input2.txt
+Enter location of number to retrieve or -1 to quit: 0
+Requested location is empty
+Enter location of number to retrieve or -1 to quit: -1
+
+Enter 'f' or 'F' to run again, anything else to quit: f
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
-Enter file path: CODE INPUTTED
+Enter file path: input2.txt
+CODE INPUTTED
 ! Second input file to test lexer !
 while (fahr < upper) a = 23.00 whileend 
 
@@ -534,6 +539,7 @@ Separator:   )
 Identifier:  a
 Operator:    =
 Number:      23.00(float)
+23.00 stored at location 0
 Stack Content: NOISIOISK$
 
 Abbreviations:
@@ -545,11 +551,18 @@ K - Keyword
 Syntactically Correct!
 
 
-Enter 'f' or 'F' to run again, anything else to quit: f input3.txt
+Enter location of number to retrieve or -1 to quit: 0
+23.00
+Enter location of number to retrieve or -1 to quit: 1
+Requested location is empty
+Enter location of number to retrieve or -1 to quit: -1
+
+Enter 'f' or 'F' to run again, anything else to quit: f
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
-Enter file path: CODE INPUTTED
+Enter file path: input3.txt
+CODE INPUTTED
 ! Third input file to test lexer !
 ! return true if one < four and false if one >= four !
 int one, two, three, four;
@@ -578,8 +591,10 @@ Separator:   )
 Keyword:     then
 Keyword:     output
 Number:      100(int)
+100 stored at location 0
 Operator:    /
 Number:      10.5(float)
+10.5 stored at location 1
 Separator:   ;
 Keyword:     endif
 Keyword:     else
@@ -597,20 +612,62 @@ K - Keyword
 Syntactically Correct!
 
 
-Enter 'f' or 'F' to run again, anything else to quit: f input4.txt
+Enter location of number to retrieve or -1 to quit: 0
+100
+Enter location of number to retrieve or -1 to quit: 1
+10.5
+Enter location of number to retrieve or -1 to quit: 2
+Requested location is empty
+Enter location of number to retrieve or -1 to quit: -1
+
+Enter 'f' or 'F' to run again, anything else to quit: f
 --------------------------------------------------------------------
 
 --------------------------------------------------------------------
-Enter file path: CODE INPUTTED
+Enter file path: input4.txt
+CODE INPUTTED
 ! This is to test a case where the syntax fails !
 
-if + 
+if(3 > 1) {
+		4 + 2;
+		if +;
+		blah = 0;
+		no = 1;
+
+} 
 
 PARSED CODE
 TOKENS       LEXEMES
 Keyword:     if
+Separator:   (
+Number:      3(int)
+3 stored at location 0
+Operator:    >
+Number:      1(int)
+1 stored at location 1
+Separator:   )
+Separator:   {
+Number:      4(int)
+4 stored at location 2
 Operator:    +
-Stack Content: OK$
+Number:      2(int)
+2 stored at location 3
+Separator:   ;
+Keyword:     if
+Operator:    +
+Separator:   ;
+Identifier:  blah
+Operator:    =
+Number:      0(int)
+0 stored at location 4
+Separator:   ;
+Identifier:  no
+Operator:    =
+Number:      1(int)
+1 stored at location 5
+Separator:   ;
+Separator:   }
+Stack Content: SSNOISNOISOKSNONSSNONSK$
 
 Abbreviations:
 O - Operator
@@ -618,12 +675,30 @@ I - Identifier
 S - Separator
 N - Number
 K - Keyword
-Syntactically incorrect: K cannot precede O
+Syntactical Error at Significant term #12
+K cannot precede O
 
-Enter 'f' or 'F' to run again, anything else to quit: j
+Enter location of number to retrieve or -1 to quit: 0
+3
+Enter location of number to retrieve or -1 to quit: 1
+1
+Enter location of number to retrieve or -1 to quit: 2
+4
+Enter location of number to retrieve or -1 to quit: 3
+2
+Enter location of number to retrieve or -1 to quit: 4
+0
+Enter location of number to retrieve or -1 to quit: 5
+1
+Enter location of number to retrieve or -1 to quit: 6
+Requested location is empty
+Enter location of number to retrieve or -1 to quit: -1
 
-C:\Users\kimbe\OneDrive - Cal State Fullerton\School\Fall 2020\CPSC 323\Compiler_323\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 21836) exited with code 0.
+Enter 'f' or 'F' to run again, anything else to quit: i
+
+C:\Users\kimbe\Desktop\Compiler_323\Compiler_323\Debug\Compiler_323.exe (process 7704) exited with code 0.
 To automatically close the console when debugging stops, enable Tools->Options->Debugging->Automatically close the console when debugging stops.
 Press any key to close this window . . .
+
 
 */
