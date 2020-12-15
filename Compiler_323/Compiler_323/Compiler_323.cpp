@@ -54,7 +54,7 @@ public:
 			return;
 		}
 		temp = stack[top];
-		top--;		
+		top--;
 	}
 
 	void stackParser();
@@ -66,8 +66,35 @@ public:
 		return isCorrect;
 	}
 
-	string Types[1000];
+	string Types[100];
+	string storedNumbers[100];
+	int storageLocation = 0;
+	void storeNumbers(string input) {
+		cout << input << " stored at location: " << storageLocation << endl;
+		storageLocation++;
+	}
 
+	void retrieveNumbers() {
+		int requestedLocation = 100;
+		while (requestedLocation != -1) {
+			cout << "Enter location of number to retrieve or -1 to quit: ";
+			cin >> requestedLocation;
+			if (requestedLocation >= storageLocation) {
+				cout << "Requested location is empty" << endl;
+			}
+			else
+			{
+				cout << storedNumbers[requestedLocation] << endl;
+			}
+		}
+	}
+
+	void clearMemory() {
+		for (int i = 0; i < storageLocation; i++) {
+			storedNumbers[i] = "";
+		}
+		storageLocation = 0;
+	}
 };
 
 void Compiler::stackParser() {
@@ -87,7 +114,7 @@ void Compiler::stackParser() {
 		N -> O,N,K
 		S -> I,N,K,S
 		O -> N,I
-		
+
 	*/
 	fstream write;
 	write.open("syntaxoutput.txt");
@@ -104,10 +131,10 @@ void Compiler::stackParser() {
 	std::cout << "K - Keyword" << endl;
 
 	int upper = top;
-	while (stack[upper] != '$' && stack[upper] != ' ') {
+	while (stack[upper] != '$') {
 		if (stack[upper] == 'K') {
 			upper--;
-			if (stack[upper] == 'I' || stack[upper] =='S' || stack[upper] == 'K') {
+			if (stack[upper] == 'I' || stack[upper] == 'S' || stack[upper] == 'K') {
 				upper--;
 			}
 			else {
@@ -172,50 +199,53 @@ void Compiler::stackParser() {
 			upper--;
 			if (stack[upper] == '$' || stack[upper] == ' ') {
 				break;
-			}else
-			if (stack[upper] == 'I' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
-				upper--;
-			}else{
-				write << "Syntactical Error at Significant term #" << upper << endl;
-				cout << "Syntactical Error at Significant term #" << upper << endl;
-				cout << stack[upper];
-				upper++;
-				std::cout << " cannot precede " << stack[upper] << endl;
-				write << " cannot precede " << stack[upper] << endl;
-				setIsCorrect(false);
-				break;
 			}
+			else
+				if (stack[upper] == 'I' || stack[upper] == 'N' || stack[upper] == 'S' || stack[upper] == 'K') {
+					upper--;
+				}
+				else {
+					write << "Syntactical Error at Significant term #" << upper << endl;
+					cout << "Syntactical Error at Significant term #" << upper << endl;
+					cout << stack[upper];
+					upper++;
+					std::cout << " cannot precede " << stack[upper] << endl;
+					write << " cannot precede " << stack[upper] << endl;
+					setIsCorrect(false);
+					break;
+				}
 		}
 		if (stack[upper] == 'O') {
 			upper--;
-			if (stack[upper] == '$' || stack[upper] == ' ') {
-				break;
-			}else	
-			if (stack[upper] == 'N' || stack[upper] == 'I') {
-				upper--;
-			}
-			else { 
-				write << "Syntactical Error at Significant term #" << upper << endl;
-				cout << "Syntactical Error at Significant term #" << upper << endl;
-				cout << stack[upper];
-				upper++;
-				std::cout << " cannot precede " << stack[upper] << endl;
-				write << " cannot precede " << stack[upper] << endl;
-				setIsCorrect(false);
+			if (stack[upper] == '$') {
 				break;
 			}
+			else
+				if (stack[upper] == 'N' || stack[upper] == 'I') {
+					upper--;
+				}
+				else {
+					write << "Syntactical Error at Significant term #" << upper << endl;
+					cout << "Syntactical Error at Significant term #" << upper << endl;
+					cout << stack[upper];
+					upper++;
+					std::cout << " cannot precede " << stack[upper] << endl;
+					write << " cannot precede " << stack[upper] << endl;
+					setIsCorrect(false);
+					break;
+				}
 		}
 	}
 	if (getIsCorrect() == true) {
 		cout << "Syntactically Correct!" << endl << endl;
-		write << endl <<"Syntactically Correct!" << endl;
+		write << endl << "Syntactically Correct!" << endl;
 	}
 	write.close();
 }
 
 int Compiler::Keyword(char buffer[])
 {
-	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not"};
+	char keywords[20][10] = { "int", "float", "bool", "true", "false", "if", "else", "then", "endif", "while", "whileend", "do", "doend", "for", "forend", "input", "output","and", "or" , "not" };
 
 	int flag = 0;
 	for (int i = 0; i < 20; i++)
@@ -284,9 +314,9 @@ void Compiler::outputCode(string filename) {
 int Compiler::isNum(char buffer) {
 	char numbers[10] = { '0','1','2','3','4','5','6','7','8','9' };
 	for (int i = 0; i < 10; i++) {
-if (buffer == numbers[i]) {
-	return 1;
-}
+		if (buffer == numbers[i]) {
+			return 1;
+		}
 	}
 
 	return 0;
@@ -336,7 +366,9 @@ void Compiler::lexer(string fileName) {
 
 			if (isNum(buffer[0]) == 1) {
 				cout << "Number:      ";
+
 				while (buffer[i] != NULL) {
+					storedNumbers[storageLocation] += buffer[i];
 					cout << buffer[i];
 					if (buffer[i] == '.') {
 						isFloat = true;
@@ -350,8 +382,10 @@ void Compiler::lexer(string fileName) {
 					cout << "(int)";
 				}
 				cout << endl;
-
 				push('N');
+				cout << storedNumbers[storageLocation] << " stored at location " << storageLocation << endl;
+				storageLocation++;
+
 			}
 
 			//*
@@ -386,7 +420,7 @@ void Compiler::lexer(string fileName) {
 		}
 	}
 	write << "Stack Content: ";
-	for (int i = top; i >= 0; i--){
+	for (int i = top; i >= 0; i--) {
 		write << stack[i];
 	}
 
@@ -411,13 +445,15 @@ int main()
 		c.display(c.stack);
 		c.stackParser();
 		cout << endl;
+		c.retrieveNumbers();
+		c.clearMemory();
 		cout << "Enter 'f' or 'F' to run again, anything else to quit: ";
 		cin >> choice;
 		if (choice != 'f' && choice != 'F') {
 			break;
 		}
 
-		cout <<"--------------------------------------------------------------------";
+		cout << "--------------------------------------------------------------------";
 		cout << endl << endl;
 		cout << "--------------------------------------------------------------------";
 		cout << endl;
